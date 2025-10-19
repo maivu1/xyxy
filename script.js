@@ -618,8 +618,8 @@ scene.add(planet);
 
 // ---- TẠO CÁC VÒNG CHỮ QUAY QUANH HÀNH TINH ----
 const ringTexts = [
-  'Tặng Bạn',
-  "Chúc Tốt Lành",
+  'Chúc 20-10',
+  "Một Ngày Tốt Lành",
   "Nguyễn Thị Tuyết Nhi",
   "Con Mõm ☻☻",
   ...(window.dataLove2Loveloom && window.dataLove2Loveloom.data.ringTexts ? window.dataLove2Loveloom.data.ringTexts : [])
@@ -706,24 +706,24 @@ function createTextRings() {
     textCanvas.height = textureHeight;
     const ctx = textCanvas.getContext('2d');
 
-    ctx.clearRect(0, 0, textCanvas.width, textureHeight);
+     ctx.clearRect(0, 0, textCanvas.width, textureHeight);
     ctx.font = `bold ${fontSize}px Arial, sans-serif`;
     ctx.fillStyle = 'white';
     ctx.textAlign = 'left';
     ctx.textBaseline = 'alphabetic';
-
+    const textYPosition = textureHeight * 0.82;
     // Hiệu ứng glow cho viền chữ
-    ctx.shadowColor = '#e0b3ff';
-    ctx.shadowBlur = 18;
-    ctx.lineWidth = 7;
-    ctx.strokeStyle = '#fff';
-    ctx.strokeText(fullText, 0, textureHeight * 0.82); // căn dòng thấp hơn
+    ctx.shadowColor = '#000000ff'; // Màu Magenta
+    ctx.shadowBlur = 25;
+    ctx.lineWidth = 8;
+    ctx.strokeStyle = '#060101ff';
+    ctx.strokeText(fullText, 0, textYPosition);
 
     // Hiệu ứng glow cho phần fill
-    ctx.shadowColor = '#ffb3de';
-    ctx.shadowBlur = 24;
-    ctx.fillStyle = '#fff';
-    ctx.fillText(fullText, 0, textureHeight * 0.84);
+    ctx.shadowColor = '#efefefff'; // Màu tím Lavender
+    ctx.shadowBlur = 30;
+    ctx.fillStyle = '#e308dcff';
+    ctx.fillText(fullText, 0, textYPosition);
 
     const ringTexture = new THREE.CanvasTexture(textCanvas);
     ringTexture.wrapS = THREE.RepeatWrapping;
@@ -1116,40 +1116,49 @@ function animate() {
   renderer.render(scene, camera);
 }
 function createHintText() {
-  const canvasSize = 512;
-  const canvas = document.createElement('canvas');
-  canvas.width = canvas.height = canvasSize;
-  const context = canvas.getContext('2d');
-  const fontSize = 50;
-  const text = 'Chạm Vào Tinh Cầu';
-  context.font = `bold ${fontSize}px Arial, sans-serif`;
-  context.textAlign = 'center';
-  context.textBaseline = 'middle';
-  context.shadowColor = '#ffb3de';
-  context.shadowBlur = 5;
-  context.lineWidth = 2;
-  context.strokeStyle = 'rgba(255, 200, 220, 0.8)';
-  context.strokeText(text, canvasSize / 2, canvasSize / 2);
-  context.shadowColor = '#e0b3ff';
-  context.shadowBlur = 5;
-  context.lineWidth = 2;
-  context.strokeStyle = 'rgba(220, 180, 255, 0.5)';
-  context.strokeText(text, canvasSize / 2, canvasSize / 2);
-  context.shadowColor = 'transparent';
-  context.shadowBlur = 0;
-  context.fillStyle = 'white';
-  context.fillText(text, canvasSize / 2, canvasSize / 2);
-  const textTexture = new THREE.CanvasTexture(canvas);
-  textTexture.needsUpdate = true;
-  const textMaterial = new THREE.MeshBasicMaterial({
-    map: textTexture,
-    transparent: true,
-    side: THREE.DoubleSide
-  });
-  const planeGeometry = new THREE.PlaneGeometry(16, 8);
-  hintText = new THREE.Mesh(planeGeometry, textMaterial);
-  hintText.position.set(0, 15, 0);
-  scene.add(hintText);
+    const canvasSize = 512;
+    const canvas = document.createElement('canvas');
+    canvas.width = canvas.height = canvasSize;
+    const context = canvas.getContext('2d');
+    const fontSize = 50;
+    const text = 'Chạm Vào Tinh Cầu';
+    context.font = `bold ${fontSize}px Arial, sans-serif`;
+    context.textAlign = 'center';
+    context.textBaseline = 'middle';
+
+    // ---- ĐOẠN MÃ ĐƯỢC CHỈNH SỬA ----
+
+    // LỚP 1: Viền đen mỏng để tạo chiều sâu và tách biệt khỏi nền
+    context.shadowColor = 'transparent'; // Tắt shadow cho lớp này
+    context.lineWidth = 8;
+    context.strokeStyle = 'rgba(0, 0, 0, 0.8)';
+    context.strokeText(text, canvasSize / 2, canvasSize / 2);
+
+    // LỚP 2: Lớp glow màu xanh Cyan rực rỡ
+    context.shadowColor = '#00ffff'; // Màu Cyan
+    context.shadowBlur = 20;
+    context.lineWidth = 5;
+    context.strokeStyle = '#fff';
+    context.strokeText(text, canvasSize / 2, canvasSize / 2);
+
+    // LỚP 3: Lớp chữ trắng chính ở trên cùng
+    context.shadowColor = 'transparent'; // Tắt shadow cho lớp fill
+    context.fillStyle = 'white';
+    context.fillText(text, canvasSize / 2, canvasSize / 2);
+
+    // ---- KẾT THÚC CHỈNH SỬA ----
+
+    const textTexture = new THREE.CanvasTexture(canvas);
+    textTexture.needsUpdate = true;
+    const textMaterial = new THREE.MeshBasicMaterial({
+        map: textTexture,
+        transparent: true,
+        side: THREE.DoubleSide
+    });
+    const planeGeometry = new THREE.PlaneGeometry(16, 8);
+    hintText = new THREE.Mesh(planeGeometry, textMaterial);
+    hintText.position.set(0, 15, 0);
+    scene.add(hintText);
 }
 
 // ---- CÁC HÀM XỬ LÝ SỰ KIỆN VÀ KHỞI ĐỘNG ----
